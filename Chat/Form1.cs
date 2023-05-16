@@ -35,6 +35,7 @@ namespace Chat
                 // передача второй форме имени пользователя
                 form2.Txt = this.textBox_username.Text;
             }
+            // если не введено имя, устанавливается имя по умолчанию
             else form2.Txt = "NoName";
         }
 
