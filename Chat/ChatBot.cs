@@ -7,19 +7,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.IO;
+using System.Xml.Serialization;
 
 namespace Chat
 {
-    // абстрактный класс чатбота
-    /*
-    public abstract class AbstractChatBot
-    {
-        // абстрактный метод для ответа
-        public abstract string answer(string s);
-    }*/
-
-
-
     // класс чатбот(наследник от абстрактного класса)
     public class ChatBotCS : AbstractChatBot
     {
@@ -28,7 +19,8 @@ namespace Chat
 
         //todo: hist
         //List<string> hist = new List<string>();
-        string hist;
+        //string hist;
+        public List<string> hist = new List<string>();
 
         // сетер для имени пользователя
         public void username_set(string user)
@@ -172,21 +164,58 @@ namespace Chat
         /// сохранение истории
         public void SaveToHist(string text)
         {
-            this.hist = text;
+            //this.hist = text;
+            hist.Add(text);
         }
+
 
         /// гетер для истории
-        public string get_hist()
+        public List<string> get_hist()
         {
-            return this.hist;
+            return hist;
         }
 
+
         /// сохранение истории в файл
-        public void SaveToFile(string path, string hist)
+        public void SaveToFile(string path, List<string> hist)
         {
-            path = @"MyFile";
-            // сохранение истории
-            File.AppendAllText(path, hist);
+            // добавление в файл
+            using (StreamWriter writer = new StreamWriter(path, true))
+            {
+                for (int i = 0; i < hist.Count(); i++)
+                {
+                    writer.WriteLine(hist[i]);
+                }
+
+            }
+        }
+
+        public void LoadHistory(string path)
+        {
+            // проверка на существование файла
+            // если не существует, то создать
+            if (File.Exists(path))
+            {
+                string s;
+
+                using (StreamReader reader = new StreamReader(path))
+                {
+
+                    do
+                    {
+                        // Прочитать строку из файла
+                        s = reader.ReadLine();
+
+                        hist.Add(s); // добавление строки в историю
+                    }
+                    while (s != null); // проверка, не конец ли файла
+
+                    reader.Close();
+
+                }
+            }
+            
+
         }
     }
 }

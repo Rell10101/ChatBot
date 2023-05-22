@@ -66,6 +66,8 @@ namespace Chat
                 textBox_out.Text += textBox_In.Text + "(" + user.username_get() + ", " + DateTime.Now.ToString("T") + ")\n" + Environment.NewLine;
                 // ответ чатбота
                 textBox_out.Text += user.answer(textBox_In.Text) + Environment.NewLine + Environment.NewLine;
+                // сохранение сообщения
+                user.SaveToHist(textBox_In.Text + "(" + user.username_get() + ", " + DateTime.Now.ToString("T") + ")\n" + user.answer(textBox_In.Text));
             }
             // очистка поля ввода
             textBox_In.Text = "";
@@ -83,13 +85,10 @@ namespace Chat
             //шестнадцатеричные escape-последовательности (например, "\x0041" для прописной буквы A)
             //и escape-последовательности Юникода (например, "\u0041" для прописной буквы A) интерпретируются буквально.
 
-            //string Text = textBox_out.Text;
-            // сохранение истории
-            //File.AppendAllText(path, Text);
+            //user.SaveToHist(textBox_out.Text);
 
-            user.SaveToHist(textBox_out.Text);
-
-            user.SaveToFile(path, user.get_hist());
+            user.SaveToFile(path, user.hist);
+            
 
             // закрытие первой невидимой формы(чтобы закрывалась и вся программа)
             Program.form_user.Close();
@@ -100,17 +99,29 @@ namespace Chat
         {
             // название файла
             string path = @"MyFile";
+            
             // проверка на существование файла
+            /*
             if (File.Exists(path))
             {   
-
-                // todo: store data inside bot
                 // если файл сущесвует, то вывести из него данные в окно вывода
                 //textBox_out.Text = File.ReadAllText(path);
                 user.SaveToHist(File.ReadAllText(path));
-                textBox_out.Text = user.get_hist();
+                textBox_out.Text += user.get_hist();
                 File.Delete(path);
             }
+            */
+            user.LoadHistory(path);
+
+            for (int i = 0; i < user.hist.Count(); i++)
+            {
+                //writer.WriteLine(hist[i]);
+                textBox_out.Text += user.hist[i];
+                textBox_out.Text += Environment.NewLine;
+            }
+
+            File.Delete(path);
+
         }
 
         // горячая клавиша для отправки сообщения(enter)
