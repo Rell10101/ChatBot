@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Xml.Serialization;
 
+// model
 namespace Chat
 {
     // класс чатбот(наследник от абстрактного класса)

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 
+// controller
 namespace Chat
 {
     // форма используется для ввода имени пользователя
